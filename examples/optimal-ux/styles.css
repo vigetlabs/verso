@@ -1,0 +1,97 @@
+.example-container {
+  display: flex;
+  width: 500px;
+}
+
+li {
+  display: inline-block;
+}
+
+button {
+  border-radius: 0;
+  background: none;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+button.plain {
+  border-color: transparent;
+  position: relative;
+}
+
+button.plain:not([disabled]):hover,
+button.plain:not([disabled]):focus {
+  background: transparent;
+}
+
+button.plain {
+  color: transparent;
+  font-weight: bold;
+}
+
+button.plain[disabled]::after {
+  opacity: .5;
+}
+
+button.plain::after {
+  content: attr(data-text);
+  font-weight: normal;
+  position: absolute;
+  color: #000;
+  top: 50%;
+  left: 50%;
+  line-height: 1;
+  transform: translateX(-50%) translateY(-50%);
+  width: 100%;
+}
+
+button.plain:not([disabled]):hover::after,
+button.plain:not([disabled]):focus::after {
+  font-weight: bold;
+}
+
+span {
+  padding: 8px 12px;
+}
+
+button:not([disabled]) {
+  cursor: pointer;
+}
+
+button:not([disabled]):hover,
+button:not([disabled]):focus {
+  background-color: #eee;
+  font-weight: bold;
+}
+
+.page-link {
+  color: transparent;
+  position: relative;
+  text-align: center;
+  min-width: 43px;
+}
+
+.page-link::after {
+  content: attr(data-page);
+  color: #000;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+button.current {
+  border-color: transparent;
+}
+
+.page-info {
+  margin: 0;
+  line-height: 40px;
+}
+
+.pagination-input {
+  text-align: right;
+}
+
+.pagination-container {
+  margin: 0 0 0 auto;
+}

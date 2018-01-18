@@ -1,6 +1,6 @@
 import React from 'react'
 import Verso from 'verso'
-import styles from './styles.css'
+import './styles.css'
 
 export default class Pagination extends React.Component {
   // this state would be props
@@ -45,24 +45,32 @@ export default class Pagination extends React.Component {
 
   renderPagination = ({
     currentPage,
-    pageCount,
+    totalPages,
     previousPage,
     nextPage,
-    items,
-    start,
-    end,
+    pages,
+    itemStart,
+    itemEnd,
     atStart,
     atEnd
   }) => {
-    let fixedLastPage = currentPage < pageCount - 2
+    let fixedLastPage = currentPage < totalPages - 2
 
     return (
       <div className="example example-basic">
-        <p className="page-info">Showing {start} - {end} of { this.state.items.length }</p>
+        <p className="page-info">
+          Showing {itemStart} - {itemEnd} of {this.state.items.length}
+        </p>
 
         <ul className="pagination-container">
           <li>
-            {this.renderLink(previousPage, '← Previous', null, !previousPage, 'plain')}
+            {this.renderLink(
+              previousPage,
+              '← Previous',
+              null,
+              !previousPage,
+              'plain'
+            )}
           </li>
 
           {!atStart && <li>{this.renderLink(1, 1, null)}</li>}
@@ -73,25 +81,27 @@ export default class Pagination extends React.Component {
             </li>
           )}
 
-          {items.map((item, i) =>
-            this.renderItem(item, i, item === currentPage)
+          {pages.map((page, i) =>
+            this.renderPage(page, i, page === currentPage)
           )}
 
           {!atEnd &&
-            currentPage < pageCount - 3 && (
+            currentPage < totalPages - 3 && (
               <li key="ellipse-right">
                 <span>…</span>
               </li>
             )}
 
-          {!atEnd && <li>{this.renderLink(pageCount, pageCount, null)}</li>}
-          <li>{this.renderLink(nextPage, 'Next →', null, !nextPage, 'plain')}</li>
+          {!atEnd && <li>{this.renderLink(totalPages, totalPages, null)}</li>}
+          <li>
+            {this.renderLink(nextPage, 'Next →', null, !nextPage, 'plain')}
+          </li>
         </ul>
       </div>
     )
   }
 
-  renderItem = (item, i, isCurrent) => {
+  renderPage = (item, i, isCurrent) => {
     return <li key={item}>{this.renderPageLink(item, item, isCurrent)}</li>
   }
 

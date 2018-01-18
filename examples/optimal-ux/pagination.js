@@ -6,6 +6,7 @@ export default class Pagination extends React.Component {
   // this state would be props
   state = {
     currentPage: 1,
+    inputValue: 1,
     items: [
       1,
       2,
@@ -26,11 +27,22 @@ export default class Pagination extends React.Component {
       17,
       18,
       19,
-      20
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
     ]
   }
 
   render() {
+    console.log('render', this.state.currentPage)
     return (
       <Verso
         maxItems={5}
@@ -54,44 +66,32 @@ export default class Pagination extends React.Component {
     atStart,
     atEnd
   }) => {
+    let isLastPage = currentPage === totalPages
+    let isFirstPage = currentPage === 1
+    let noPrev = !previousPage
+    let noNext = !nextPage
+
     return (
-      <div className="example example-basic">
+      <div className="example-container">
         <p className="page-info">
-          Showing {itemStart + 1} - {itemEnd} of {this.state.items.length} (Page{' '}
-          {currentPage} of {totalPages})
+          Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}
         </p>
 
         <ul className="pagination-container">
+          <li>{this.renderLink(1, '«', null, isFirstPage, 'plain')}</li>
+          <li>{this.renderLink(previousPage, '‹', null, noPrev, 'plain')}</li>
           <li>
-            {this.renderLink(1, '« First', null, currentPage === 1, 'plain')}
+            <input
+              className="pagination-input"
+              type="text"
+              size="2"
+              value={this.state.inputValue}
+              onChange={e => this.handleInputChange(e, totalPages)}
+            />{' '}
+            of {totalPages}
           </li>
-
-          <li>
-            {this.renderLink(
-              previousPage,
-              '‹ Previous',
-              null,
-              !previousPage,
-              'plain'
-            )}
-          </li>
-
-          {pages.map((page, i) =>
-            this.renderPage(page, i, page === currentPage)
-          )}
-
-          <li>
-            {this.renderLink(nextPage, 'Next ›', null, !nextPage, 'plain')}
-          </li>
-          <li>
-            {this.renderLink(
-              totalPages,
-              'Last »',
-              null,
-              currentPage === totalPages,
-              'plain'
-            )}
-          </li>
+          <li>{this.renderLink(nextPage, '›', null, noNext, 'plain')}</li>
+          <li>{this.renderLink(totalPages, '»', null, isLastPage, 'plain')}</li>
         </ul>
       </div>
     )
@@ -114,7 +114,7 @@ export default class Pagination extends React.Component {
       <button
         className={className}
         disabled={isCurrent || disabled}
-        onClick={e => this.onClickPageLink(e, page)}
+        onClick={e => this.handlePageLinkClick(e, page)}
         data-text={text}
       >
         {text}
@@ -127,7 +127,7 @@ export default class Pagination extends React.Component {
       <button
         className={`page-link ${isCurrent ? 'current' : ''}`}
         disabled={isCurrent || disabled}
-        onClick={e => this.onClickPageLink(e, page)}
+        onClick={e => this.handlePageLinkClick(e, page)}
         data-page={text}
       >
         xx
@@ -135,8 +135,24 @@ export default class Pagination extends React.Component {
     )
   }
 
-  onClickPageLink = (e, page) => {
-    this.setState({ currentPage: page })
+  handleInputChange = (e, totalPages) => {
+    let value = e.target.value
+
+    this.setState({ inputValue: value || '' }, () => {
+      this.handlePageChange(value, totalPages)
+    })
+  }
+
+  handlePageChange = (value, totalPages) => {
+    let parsedValue = parseInt(value, 10)
+
+    if (!isNaN(parsedValue) && parsedValue <= totalPages) {
+      this.setState({ currentPage: parsedValue, inputValue: parsedValue })
+    }
+  }
+
+  handlePageLinkClick = (e, page) => {
+    this.setState({ currentPage: page, inputValue: page })
     e.preventDefault()
   }
 }
