@@ -5,6 +5,7 @@ import range from 'lodash/range'
 class Verso extends React.Component {
   static propTypes = {
     children: PropTypes.func,
+    getPages: PropTypes.func,
     maxItems: PropTypes.number,
     perPage: PropTypes.number.isRequired,
     totalCount: PropTypes.number.isRequired,
@@ -13,16 +14,13 @@ class Verso extends React.Component {
 
   static defaultProps = {
     children: () => {},
-    maxItems: 5 // show 5 buttons
+    getPages: Verso.getPages,
+    maxItems: 5
   }
 
-  getTotalPages() {
-    return Math.ceil(this.props.totalCount / this.props.perPage)
-  }
+  static range = range
 
-  getPages(currentPage, totalPages) {
-    let { maxItems } = this.props
-
+  static getPages(maxItems, currentPage, totalPages) {
     // fewer pages than max items
     if (totalPages < maxItems) {
       return range(1, totalPages + 1)
@@ -43,9 +41,21 @@ class Verso extends React.Component {
     return range(start, start + maxItems)
   }
 
+  getTotalPages(totalCount, perPage) {
+    return Math.ceil(totalCount / perPage)
+  }
+
   render() {
-    let { perPage, children, maxItems, currentPage, totalCount } = this.props
-    let totalPages = this.getTotalPages()
+    let {
+      getPages,
+      perPage,
+      children,
+      maxItems,
+      currentPage,
+      totalCount
+    } = this.props
+
+    let totalPages = this.getTotalPages(totalCount, perPage)
     let previousPage = currentPage > 1
     let nextPage = currentPage < totalPages
     let half = Math.floor(maxItems / 2)
@@ -57,7 +67,7 @@ class Verso extends React.Component {
       currentPage,
       itemStart,
       itemEnd,
-      pages: this.getPages(currentPage, totalPages),
+      pages: getPages(maxItems, currentPage, totalPages),
       nextPage: nextPage ? currentPage + 1 : null,
       previousPage: previousPage ? currentPage - 1 : null,
       atStart: currentPage <= half + 1,

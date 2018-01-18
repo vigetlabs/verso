@@ -5,6 +5,7 @@ import './styles.css'
 export default class Pagination extends React.Component {
   // this state would be props
   state = {
+    loading: false,
     currentPage: 1,
     inputValue: 1,
     items: [
@@ -41,8 +42,13 @@ export default class Pagination extends React.Component {
     ]
   }
 
+  fakeJax() {
+    return new Promise(resolve => {
+      setTimeout(resolve, 500 + Math.random() * 1000)
+    })
+  }
+
   render() {
-    console.log('render', this.state.currentPage)
     return (
       <Verso
         maxItems={5}
@@ -75,6 +81,7 @@ export default class Pagination extends React.Component {
       <div className="example-container">
         <p className="page-info">
           Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}
+          {this.state.loading && <div class="loader">Loading...</div>}
         </p>
 
         <ul className="pagination-container">
@@ -86,6 +93,7 @@ export default class Pagination extends React.Component {
               type="text"
               size="2"
               value={this.state.inputValue}
+              disabled={this.state.loading}
               onChange={e => this.handleInputChange(e, totalPages)}
             />{' '}
             of {totalPages}
@@ -113,7 +121,7 @@ export default class Pagination extends React.Component {
     return (
       <button
         className={className}
-        disabled={isCurrent || disabled}
+        disabled={isCurrent || disabled || this.state.loading}
         onClick={e => this.handlePageLinkClick(e, page)}
         data-text={text}
       >
@@ -126,7 +134,7 @@ export default class Pagination extends React.Component {
     return (
       <button
         className={`page-link ${isCurrent ? 'current' : ''}`}
-        disabled={isCurrent || disabled}
+        disabled={isCurrent || disabled || this.state.loading}
         onClick={e => this.handlePageLinkClick(e, page)}
         data-page={text}
       >
@@ -147,12 +155,20 @@ export default class Pagination extends React.Component {
     let parsedValue = parseInt(value, 10)
 
     if (!isNaN(parsedValue) && parsedValue <= totalPages) {
-      this.setState({ currentPage: parsedValue, inputValue: parsedValue })
+      this.changePage(parsedValue)
     }
   }
 
   handlePageLinkClick = (e, page) => {
-    this.setState({ currentPage: page, inputValue: page })
+    this.changePage(page)
     e.preventDefault()
+  }
+
+  changePage(page) {
+    this.setState({loading: true }, () => {
+      this.fakeJax().then(() => {
+        this.setState({ loading: false, currentPage: page, inputValue: page })
+      })
+    })
   }
 }
