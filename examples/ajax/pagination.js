@@ -79,10 +79,10 @@ export default class Pagination extends React.Component {
 
     return (
       <div className="example-container">
-        <p className="page-info">
-          Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}
+        <div className="page-info">
+          <span>Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}</span>
           {this.state.loading && <div class="loader">Loading...</div>}
-        </p>
+        </div>
 
         <ul className="pagination-container">
           <li>{this.renderLink(1, '«', null, isFirstPage, 'plain')}</li>
@@ -112,7 +112,7 @@ export default class Pagination extends React.Component {
   renderEllipse() {
     return (
       <li key="ellipse">
-        <span>…</span>
+        <span className="ellipse">…</span>
       </li>
     )
   }

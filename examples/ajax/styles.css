@@ -52,7 +52,7 @@ button.plain:not([disabled]):focus::after {
   font-weight: bold;
 }
 
-span {
+.ellipse {
   padding: 8px 12px;
 }
 
