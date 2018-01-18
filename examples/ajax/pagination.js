@@ -1,45 +1,14 @@
 import React from 'react'
-import Verso from 'verso'
+import Verso, { range } from 'verso'
 import './styles.css'
 
 export default class Pagination extends React.Component {
-  // this state would be props
+  // in a real app, `loading`, `currentPage` and `items` would be props to this component
   state = {
     loading: false,
     currentPage: 1,
     inputValue: 1,
-    items: [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28,
-      29,
-      30
-    ]
+    items: range(1, 31)
   }
 
   fakeJax() {
@@ -80,7 +49,9 @@ export default class Pagination extends React.Component {
     return (
       <div className="example-container">
         <div className="page-info">
-          <span>Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}</span>
+          <span>
+            Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}
+          </span>
           {this.state.loading && <div class="loader">Loading...</div>}
         </div>
 
@@ -165,7 +136,7 @@ export default class Pagination extends React.Component {
   }
 
   changePage(page) {
-    this.setState({loading: true }, () => {
+    this.setState({ loading: true }, () => {
       this.fakeJax().then(() => {
         this.setState({ loading: false, currentPage: page, inputValue: page })
       })

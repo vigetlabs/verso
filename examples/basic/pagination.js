@@ -1,33 +1,12 @@
 import React from 'react'
-import Verso from 'verso'
+import Verso, { range } from 'verso'
 import './styles.css'
 
 export default class Pagination extends React.Component {
-  // this state would be props
+  // in a real app, `currentPage` and `items` would be props to this component
   state = {
     currentPage: 1,
-    items: [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20
-    ]
+    items: range(1, 31)
   }
 
   render() {
