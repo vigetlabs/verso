@@ -18,8 +18,6 @@ class Verso extends React.Component {
     maxItems: 5
   }
 
-  static range = range
-
   static getPages(maxItems, currentPage, totalPages) {
     // fewer pages than max items
     if (totalPages < maxItems) {
@@ -41,10 +39,6 @@ class Verso extends React.Component {
     return range(start, start + maxItems)
   }
 
-  getTotalPages(totalCount, perPage) {
-    return Math.ceil(totalCount / perPage)
-  }
-
   render() {
     let {
       getPages,
@@ -55,7 +49,7 @@ class Verso extends React.Component {
       totalCount
     } = this.props
 
-    let totalPages = this.getTotalPages(totalCount, perPage)
+    let totalPages = Math.ceil(totalCount / perPage)
     let previousPage = currentPage > 1
     let nextPage = currentPage < totalPages
     let half = Math.floor(maxItems / 2)
@@ -77,3 +71,4 @@ class Verso extends React.Component {
 }
 
 export default Verso
+export { range }
