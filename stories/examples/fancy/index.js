@@ -1,5 +1,5 @@
 import React from 'react'
-import Verso, { range } from 'verso'
+import Verso, { range } from '../../../src'
 import './styles.css'
 
 export default class Pagination extends React.Component {
@@ -13,7 +13,7 @@ export default class Pagination extends React.Component {
     return (
       <Verso
         maxItems={5}
-        perPage={5} // how many items are displayed on each page
+        perPage={2} // how many items are displayed on each page
         totalCount={this.state.items.length} // total # of items
         currentPage={this.state.currentPage} // current page
       >
@@ -33,51 +33,55 @@ export default class Pagination extends React.Component {
     atStart,
     atEnd
   }) => {
+    let fixedLastPage = currentPage < totalPages - 3
+
     return (
       <div className="example example-basic">
         <p className="page-info">
-          Showing {itemStart + 1} - {itemEnd} of {this.state.items.length} (Page{' '}
-          {currentPage} of {totalPages})
+          Showing {itemStart} - {itemEnd} of {this.state.items.length}
         </p>
 
         <ul className="pagination-container">
           <li>
-            {this.renderLink(1, '« First', null, currentPage === 1, 'plain')}
-          </li>
-
-          <li>
             {this.renderLink(
               previousPage,
-              '‹ Previous',
+              '← Previous',
               null,
               !previousPage,
               'plain'
             )}
           </li>
 
+          {!atStart && <li>{this.renderLink(1, 1, null)}</li>}
+
+          {!atStart && (
+            <li key="ellipse-left">
+              <span>…</span>
+            </li>
+          )}
+
           {pages.map((page, i) =>
             this.renderPage(page, i, page === currentPage)
           )}
 
-          <li>
-            {this.renderLink(nextPage, 'Next ›', null, !nextPage, 'plain')}
-          </li>
-          <li>
-            {this.renderLink(
-              totalPages,
-              'Last »',
-              null,
-              currentPage === totalPages,
-              'plain'
+          {!atEnd &&
+            fixedLastPage && (
+              <li key="ellipse-right">
+                <span>…</span>
+              </li>
             )}
+
+          {!atEnd && <li>{this.renderLink(totalPages, totalPages, null)}</li>}
+          <li>
+            {this.renderLink(nextPage, 'Next →', null, !nextPage, 'plain')}
           </li>
         </ul>
       </div>
     )
   }
 
-  renderPage = (page, i, isCurrent) => {
-    return <li key={page}>{this.renderPageLink(page, page, isCurrent)}</li>
+  renderPage = (item, i, isCurrent) => {
+    return <li key={item}>{this.renderPageLink(item, item, isCurrent)}</li>
   }
 
   renderEllipse() {

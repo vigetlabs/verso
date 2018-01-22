@@ -1,44 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import range from 'lodash/range'
+import getPages from './get-pages'
 
 class Verso extends React.Component {
-  static propTypes = {
-    children: PropTypes.func,
-    getPages: PropTypes.func,
-    maxItems: PropTypes.number,
-    perPage: PropTypes.number.isRequired,
-    totalCount: PropTypes.number.isRequired,
-    currentPage: PropTypes.number.isRequired
-  }
-
-  static defaultProps = {
-    children: () => {},
-    getPages: Verso.getPages,
-    maxItems: 5
-  }
-
-  static getPages(maxItems, currentPage, totalPages) {
-    // fewer pages than max items
-    if (totalPages < maxItems) {
-      return range(1, totalPages + 1)
-    }
-
-    let half = Math.floor(maxItems / 2)
-
-    if (currentPage <= half) {
-      return range(1, maxItems + 1)
-    }
-
-    let start = currentPage - half
-
-    if (currentPage >= totalPages - half) {
-      start = totalPages - maxItems + 1
-    }
-
-    return range(start, start + maxItems)
-  }
-
   render() {
     let {
       getPages,
@@ -68,6 +33,21 @@ class Verso extends React.Component {
       atEnd: currentPage + half >= totalPages
     })
   }
+}
+
+Verso.propTypes = {
+  children: PropTypes.func,
+  getPages: PropTypes.func,
+  maxItems: PropTypes.number,
+  perPage: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired
+}
+
+Verso.defaultProps = {
+  children: () => {},
+  getPages: getPages,
+  maxItems: 5
 }
 
 export default Verso
