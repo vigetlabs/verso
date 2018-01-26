@@ -12,9 +12,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "examples": "yarn start-storybook -p 6006 -c stories",
-    "examples:build": "cd stories && npm install && cd .. && yarn build-storybook -c stories",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "examples:build": "cd stories && npm install && cd .. && yarn build-storybook -c stories"
   },
   "author": "Solomon Hawk <solomon.hawk@viget.com> (http://viget.com/)",
   "license": "MIT",
@@ -27,7 +25,11 @@
     "raf": "3.4.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.3.10",
+    "@storybook/addon-links": "^3.3.10",
+    "@storybook/addons": "^3.3.10",
     "@storybook/cli": "3.3.10",
+    "@storybook/react": "^3.3.10",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-jest": "^21.2.0",
@@ -44,7 +46,7 @@
     "eslint-plugin-react": "^7.5.1",
     "extract-text-webpack-plugin": "3.0.2",
     "html-webpack-plugin": "^2.30.1",
-    "invariant": "^2.2.2",
+    "invariant": "2.2.2",
     "jest": "^21.2.1",
     "prettier": "^1.8.2",
     "react": "^16.1.1",
@@ -52,11 +54,7 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.9.1",
     "webpack-dev-server": "^2.9.5",
-    "webpack-merge": "^4.1.1",
-    "@storybook/react": "^3.3.10",
-    "@storybook/addon-actions": "^3.3.10",
-    "@storybook/addon-links": "^3.3.10",
-    "@storybook/addons": "^3.3.10"
+    "webpack-merge": "^4.1.1"
   },
   "prettier": {
     "semi": false,

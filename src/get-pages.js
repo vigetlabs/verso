@@ -1,6 +1,6 @@
 import range from 'lodash/range'
 
-export default function getPages(maxItems, currentPage, totalPages) {
+export default function getPages({ maxItems, currentPage, totalPages } = {}) {
   if (!maxItems || !currentPage || !totalPages) {
     return []
   }

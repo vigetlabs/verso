@@ -36,7 +36,7 @@ export default class Pagination extends React.Component {
     return (
       <div className="example example-basic">
         <p className="page-info">
-          Showing {itemStart + 1} - {itemEnd} of {this.state.items.length} (Page{' '}
+          Showing {itemStart} - {itemEnd} of {this.state.items.length} (Page{' '}
           {currentPage} of {totalPages})
         </p>
 

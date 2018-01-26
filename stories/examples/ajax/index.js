@@ -50,7 +50,7 @@ export default class Pagination extends React.Component {
       <div className="example-container">
         <div className="page-info">
           <span>
-            Showing {itemStart + 1} - {itemEnd} of {this.state.items.length}
+            Showing {itemStart} - {itemEnd} of {this.state.items.length}
           </span>
           {this.state.loading && <div class="loader">Loading...</div>}
         </div>
