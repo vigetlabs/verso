@@ -1,145 +1,119 @@
-import React from 'react'
-import Verso, { range } from '../../../src'
+import 'react-table/react-table.css'
 import './styles.css'
 
-export default class Pagination extends React.Component {
+import React from 'react'
+import axios from 'axios'
+import Table from 'react-table'
+import Pagination from './pagination'
+import moment from 'moment'
+
+const BASE_API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
+const ITEMS_PER_PAGE = 50
+
+function apiUrl(page) {
+  return `${BASE_API_URL}?limit=${ITEMS_PER_PAGE}&start=${(page - 1) * ITEMS_PER_PAGE}`
+}
+
+export default class AjaxExample extends React.Component {
   // in a real app, `loading`, `currentPage` and `items` would be props to this component
   state = {
-    loading: false,
+    error: null,
+    loading: true,
     currentPage: 1,
     inputValue: 1,
-    items: range(1, 31)
+    totalCount: null,
+    items: []
   }
 
-  fakeJax() {
-    return new Promise(resolve => {
-      setTimeout(resolve, 500 + Math.random() * 1000)
+  componentDidMount() {
+    this.getTotalCount().then(() => {
+      this.getPageData(this.state.currentPage)
     })
   }
 
   render() {
     return (
-      <Verso
-        maxItems={5}
-        perPage={5} // how many items are displayed on each page
-        totalCount={this.state.items.length} // total # of items
-        currentPage={this.state.currentPage} // current page
-      >
-        {versoState => this.renderPagination(versoState)}
-      </Verso>
-    )
-  }
-
-  renderPagination = ({
-    currentPage,
-    totalPages,
-    previousPage,
-    nextPage,
-    pages,
-    itemStart,
-    itemEnd,
-    atStart,
-    atEnd
-  }) => {
-    let isLastPage = currentPage === totalPages
-    let isFirstPage = currentPage === 1
-    let noPrev = !previousPage
-    let noNext = !nextPage
-
-    return (
-      <div className="example-container">
-        <div className="page-info">
-          <span>
-            Showing {itemStart} - {itemEnd} of {this.state.items.length}
-          </span>
-          {this.state.loading && <div class="loader">Loading...</div>}
-        </div>
-
-        <ul className="pagination-container">
-          <li>{this.renderLink(1, '«', null, isFirstPage, 'plain')}</li>
-          <li>{this.renderLink(previousPage, '‹', null, noPrev, 'plain')}</li>
-          <li>
-            <input
-              className="pagination-input"
-              type="text"
-              size="2"
-              value={this.state.inputValue}
-              disabled={this.state.loading}
-              onChange={e => this.handleInputChange(e, totalPages)}
-            />{' '}
-            of {totalPages}
-          </li>
-          <li>{this.renderLink(nextPage, '›', null, noNext, 'plain')}</li>
-          <li>{this.renderLink(totalPages, '»', null, isLastPage, 'plain')}</li>
-        </ul>
+      <div className="verso-example-ajax">
+        <Pagination
+          perPage={ITEMS_PER_PAGE}
+          loading={this.state.loading}
+          totalCount={this.state.totalCount} // total # of items
+          currentPage={this.state.currentPage} // current page
+          changePage={this.changePage}
+        />
+        {this.state.items.length ? (
+          <Table
+            loading={this.state.loading}
+            loadingText={''}
+            pageSize={ITEMS_PER_PAGE}
+            data={this.state.items}
+            columns={[
+              {
+                Header: 'Name',
+                accessor: 'name'
+              },
+              {
+                Header: 'Availability',
+                accessor: 'available_supply'
+              },
+              {
+                Header: 'Rank',
+                accessor: 'rank'
+              },
+              {
+                Header: 'Price (USD)',
+                accessor: 'price_usd'
+              },
+              {
+                Header: 'Price (BTC)',
+                accessor: 'price_btc'
+              },
+              {
+                Header: 'Last Updated',
+                accessor: 'last_updated',
+                Cell: props => moment(props.value, 'X').format("MMM Do YYYY, HH:mm")
+              }
+            ]}
+            showPagination={false}
+            className="-striped -highlight"
+          />
+        ) : null}
       </div>
     )
   }
 
-  renderPage = (page, i, isCurrent) => {
-    return <li key={page}>{this.renderPageLink(page, page, isCurrent)}</li>
-  }
-
-  renderEllipse() {
-    return (
-      <li key="ellipse">
-        <span className="ellipse">…</span>
-      </li>
+  getTotalCount() {
+    return axios.get(`${BASE_API_URL}?limit=0`).then(
+      response => {
+        this.setState({ totalCount: response.data.length })
+      },
+      error => {
+        this.setState({ error, loading: false })
+      }
     )
   }
 
-  renderLink = (page, text, isCurrent, disabled, className = '') => {
-    return (
-      <button
-        className={className}
-        disabled={isCurrent || disabled || this.state.loading}
-        onClick={e => this.handlePageLinkClick(e, page)}
-        data-text={text}
-      >
-        {text}
-      </button>
-    )
-  }
-
-  renderPageLink = (page, text, isCurrent, disabled) => {
-    return (
-      <button
-        className={`page-link ${isCurrent ? 'current' : ''}`}
-        disabled={isCurrent || disabled || this.state.loading}
-        onClick={e => this.handlePageLinkClick(e, page)}
-        data-page={text}
-      >
-        xx
-      </button>
-    )
-  }
-
-  handleInputChange = (e, totalPages) => {
-    let value = e.target.value
-
-    this.setState({ inputValue: value || '' }, () => {
-      this.handlePageChange(value, totalPages)
-    })
-  }
-
-  handlePageChange = (value, totalPages) => {
-    let parsedValue = parseInt(value, 10)
-
-    if (!isNaN(parsedValue) && parsedValue <= totalPages) {
-      this.changePage(parsedValue)
-    }
-  }
-
-  handlePageLinkClick = (e, page) => {
-    this.changePage(page)
-    e.preventDefault()
-  }
-
-  changePage(page) {
-    this.setState({ loading: true }, () => {
-      this.fakeJax().then(() => {
-        this.setState({ loading: false, currentPage: page, inputValue: page })
+  getPageData(page) {
+    return new Promise((resolve, reject) => {
+      this.setState({ loading: true }, () => {
+        axios.get(apiUrl(page)).then(
+          response => {
+            this.setState({
+              error: null,
+              loading: false,
+              items: response.data,
+              currentPage: page
+            }, resolve)
+          },
+          error => {
+            this.setState({ error, loading: false }, reject)
+          }
+        )
       })
     })
+  }
+
+  changePage = page => {
+    return this.getPageData(page)
   }
 }

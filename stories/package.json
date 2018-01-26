@@ -2,7 +2,7 @@
   "name": "stories",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.stories.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,8 +10,12 @@
   "author": "Solomon Hawk <solomon.hawk@viget.com> (http://viget.com/)",
   "license": "MIT",
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "axios": "0.17.1",
+    "lodash": "4.17.4",
+    "moment": "2.20.1",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-table": "6.7.6"
   },
   "devDependencies": {}
 }
