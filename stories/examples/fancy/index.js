@@ -1,5 +1,5 @@
 import React from 'react'
-import Verso, { range } from 'verso'
+import Verso, { range } from '../../../'
 import './styles.css'
 
 export default class Pagination extends React.Component {

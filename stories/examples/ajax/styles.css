@@ -1,8 +1,13 @@
 @import './loading.css';
 
+body,
+input {
+  font-family: 'Input Mono', 'Helvetica Neue', Helvetica, monospace;
+  font-size: 14px;
+}
+
 .example-container {
   display: flex;
-  width: 500px;
 }
 
 li {

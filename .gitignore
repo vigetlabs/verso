@@ -1,2 +1,5 @@
-lib/*
-node_modules
+node_modules/
+coverage/
+build/
+.DS_Store
+storybook-static
